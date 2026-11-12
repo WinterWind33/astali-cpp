@@ -48,7 +48,7 @@ AlwaysBreakTemplateDeclarations: Yes
 AttributeMacros:
     - __capability
 BinPackArguments: true
-BinPackParameters: true
+BinPackParameters: BinPack
 BitFieldColonSpacing: Both
 BraceWrapping:
     AfterCaseLabel: false
@@ -136,7 +136,10 @@ IntegerLiteralSeparator:
     DecimalMinDigits: 0
     Hex: 0
     HexMinDigits: 0
-KeepEmptyLinesAtTheStartOfBlocks: false
+KeepEmptyLines:
+    AtEndOfFile: false
+    AtStartOfBlock: false
+    AtStartOfFile: true
 LambdaBodyIndentation: Signature
 Language: Cpp
 LineEnding: LF
@@ -171,14 +174,16 @@ RawStringFormats:
       CanonicalDelimiter: ""
       BasedOnStyle: google
 ReferenceAlignment: Pointer
-ReflowComments: true
+ReflowComments: Always
 RemoveBracesLLVM: false
 RemoveSemicolon: false
 RequiresClausePosition: OwnLine
 RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Leave
 ShortNamespaceLines: 1
-SortIncludes: CaseSensitive
+SortIncludes:
+    Enabled: true
+    IgnoreCase: false
 SortUsingDeclarations: LexicographicNumeric
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
