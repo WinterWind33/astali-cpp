@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "EditorConfig.EditorConfig",
+    "matepek.vscode-catch2-test-adapter",
+    "ms-vscode.cpptools-extension-pack",
+    "xaver.clang-format"
+  ]
+}
