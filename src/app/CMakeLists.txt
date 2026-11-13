@@ -13,3 +13,5 @@ else()
 endif()
 
 add_executable(${ASTALI_APP_TARGET} ${ASTALI_APP_SUBSYSTEM} ${ASTALI_APP_SOURCE_FILES} ${ASTALI_APP_HEADER_FILES})
+target_link_libraries(${ASTALI_APP_TARGET} astali-core)
+target_include_directories(${ASTALI_APP_TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
