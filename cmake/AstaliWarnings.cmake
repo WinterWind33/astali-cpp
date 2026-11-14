@@ -6,9 +6,17 @@
 
 include_guard(GLOBAL)
 
-set(CMAKE_COMPILE_WARNING_AS_ERROR ${ASTALI_WARNINGS_AS_ERRORS})
-
 add_library(astali-warnings INTERFACE)
+
+# Scoped to this interface target (not CMAKE_COMPILE_WARNING_AS_ERROR), so
+# warnings in third-party dependencies never fail the build.
+if(ASTALI_WARNINGS_AS_ERRORS)
+  if(MSVC)
+    target_compile_options(astali-warnings INTERFACE /WX)
+  else()
+    target_compile_options(astali-warnings INTERFACE -Werror)
+  endif()
+endif()
 
 if(MSVC) # MSVC and clang-cl
   target_compile_options(astali-warnings INTERFACE /W4)

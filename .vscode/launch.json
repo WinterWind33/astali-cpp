@@ -5,9 +5,9 @@
       "name": "Astali (Windows)",
       "type": "cppvsdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/bin/Astali.exe",
+      "program": "${command:cmake.launchTargetPath}",
       "args": [],
-      "cwd": "${workspaceFolder}/bin",
+      "cwd": "${command:cmake.launchTargetDirectory}",
       "stopAtEntry": false,
       "console": "integratedTerminal",
       "preLaunchTask": "CMake: build"
