@@ -16,26 +16,29 @@ option(ASTALI_WARNINGS_AS_ERRORS "Compiler warnings are treated as errors" OFF)
 # === Language ===
 set(ASTALI_CXX_STANDARD 23 CACHE STRING "C++ standard used to build Astali")
 set_property(CACHE ASTALI_CXX_STANDARD PROPERTY STRINGS 23 26)
-set(CMAKE_CXX_STANDARD ${ASTALI_CXX_STANDARD})
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # ================
 
 # === Directories ===
 set(ASTALI_SRC_REL_FOLDER src)
 set(ASTALI_TESTS_REL_FOLDER tests)
-set(ASTALI_BIN_ABS_FOLDER ${CMAKE_SOURCE_DIR}/bin)
-set(ASTALI_LIB_ABS_FOLDER ${CMAKE_SOURCE_DIR}/lib)
+set(ASTALI_BIN_ABS_FOLDER ${PROJECT_SOURCE_DIR}/bin)
+set(ASTALI_LIB_ABS_FOLDER ${PROJECT_SOURCE_DIR}/lib)
 # ===================
 
 # === Output configuration ===
-# $<CONFIG> gives every generator the same layout (bin/<Config>/), so Debug and
-# Release builds never overwrite each other. Multi-config generators would
-# otherwise append the config folder on their own, while single-config ones don't.
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${ASTALI_BIN_ABS_FOLDER}/$<CONFIG>")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${ASTALI_LIB_ABS_FOLDER}/$<CONFIG>")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${ASTALI_LIB_ABS_FOLDER}/$<CONFIG>")
+# Only when Astali is the top-level project: when embedded, the parent decides
+# where binaries go and whether to export compile commands.
+if(PROJECT_IS_TOP_LEVEL)
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+  # $<CONFIG> gives every generator the same layout (bin/<Config>/), so Debug and
+  # Release builds never overwrite each other. Multi-config generators would
+  # otherwise append the config folder on their own, while single-config ones don't.
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${ASTALI_BIN_ABS_FOLDER}/$<CONFIG>")
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${ASTALI_LIB_ABS_FOLDER}/$<CONFIG>")
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${ASTALI_LIB_ABS_FOLDER}/$<CONFIG>")
+endif()
 # ============================
 
 # === Warnings ===
