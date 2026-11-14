@@ -23,11 +23,13 @@ jobs:
       fail-fast: false
       matrix:
         build-type: [Debug, Release]
-        compiler: [msvc, gcc, clang, apple-clang]
+        compiler: [msvc, clang-cl, gcc, clang, apple-clang]
         # Each entry below adds runner details to every job with that compiler.
         # Linux is pinned (not ubuntu-latest) so the toolchain doesn't change under us.
+        # clang-cl ships with Visual Studio on the runner; -T ClangCL selects it.
         include:
           - { compiler: msvc, os: windows-latest, os-name: Windows }
+          - { compiler: clang-cl, os: windows-latest, os-name: Windows, cmake-args: "-T ClangCL" }
           - { compiler: gcc, os: ubuntu-26.04, os-name: Linux }
           - { compiler: clang, os: ubuntu-26.04, os-name: Linux }
           - { compiler: apple-clang, os: macos-latest, os-name: macOS }
@@ -57,6 +59,7 @@ jobs:
         run: >
           cmake -S . -B "${BUILD_DIR}"
           -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
+          ${{ matrix.cmake-args }}
           -DASTALI_BUILD_TESTS=ON
 
       - name: Show compiler
