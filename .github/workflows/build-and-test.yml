@@ -1,0 +1,68 @@
+name: Build and test
+
+on:
+  push:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Keep in sync with the newest compiler releases we want to track.
+  GCC_VERSION: "15"
+  LLVM_VERSION: "23"
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.os-name }} ${{ matrix.compiler }} (${{ matrix.build-type }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        build-type: [Debug, Release]
+        compiler: [msvc, gcc, clang, apple-clang]
+        # Each entry below adds runner details to every job with that compiler.
+        # Linux is pinned (not ubuntu-latest) so the toolchain doesn't change under us.
+        include:
+          - { compiler: msvc, os: windows-latest, os-name: Windows }
+          - { compiler: gcc, os: ubuntu-26.04, os-name: Linux }
+          - { compiler: clang, os: ubuntu-26.04, os-name: Linux }
+          - { compiler: apple-clang, os: macos-latest, os-name: macOS }
+    env:
+      BUILD_DIR: build
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install GCC
+        if: matrix.compiler == 'gcc'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y "g++-${GCC_VERSION}"
+          echo "CXX=g++-${GCC_VERSION}" >> "$GITHUB_ENV"
+
+      - name: Install Clang
+        if: matrix.compiler == 'clang'
+        run: |
+          wget -qO llvm.sh https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh "${LLVM_VERSION}"
+          rm llvm.sh
+          echo "CXX=clang++-${LLVM_VERSION}" >> "$GITHUB_ENV"
+
+      - name: Configure
+        shell: bash
+        run: >
+          cmake -S . -B "${BUILD_DIR}"
+          -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
+          -DASTALI_BUILD_TESTS=ON
+
+      - name: Show compiler
+        shell: bash
+        run: grep -E '^CMAKE_CXX_COMPILER(:|_VERSION)' "${BUILD_DIR}/CMakeCache.txt" || true
+
+      - name: Build
+        shell: bash
+        run: cmake --build "${BUILD_DIR}" --config ${{ matrix.build-type }} --parallel
