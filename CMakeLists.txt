@@ -35,6 +35,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${ASTALI_LIB_ABS_FOLDER}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${ASTALI_LIB_ABS_FOLDER}")
 # ============================
 
+# === Warnings ===
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(AstaliWarnings)
+# ================
+
 add_subdirectory(${ASTALI_SRC_REL_FOLDER})
 
 if(ASTALI_BUILD_TESTS)

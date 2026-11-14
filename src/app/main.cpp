@@ -16,11 +16,12 @@ int common_main() noexcept {
 } // namespace astali
 
 #ifdef _WIN32
-int APIENTRY WinMain(const HINSTANCE inst, const HINSTANCE, LPSTR cmdLine, int showMode) {
+int APIENTRY WinMain([[maybe_unused]] const HINSTANCE inst, const HINSTANCE,
+                     [[maybe_unused]] LPSTR cmdLine, [[maybe_unused]] int showMode) {
     return astali::common_main();
 }
 #else  // _WIN32
-int main(int argc, char* argv[]) {
+int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
     return astali::common_main();
 }
 #endif // _WIN32

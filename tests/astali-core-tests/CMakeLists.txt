@@ -9,4 +9,4 @@ set(ASTALI_CORE_TESTS_SOURCE_FILES
 
 # TODO: Replace with executable once Catch2 is in
 add_library(${ASTALI_CORE_TARGET} STATIC ${ASTALI_CORE_TESTS_SOURCE_FILES})
-target_link_libraries(${ASTALI_CORE_TARGET} PRIVATE astali-core)
+target_link_libraries(${ASTALI_CORE_TARGET} PRIVATE astali-core astali-warnings)

@@ -64,6 +64,7 @@ jobs:
           ${{ runner.os != 'Windows' && format('-DCMAKE_BUILD_TYPE={0}', matrix.build-type) || '' }}
           ${{ matrix.cmake-args }}
           -DASTALI_BUILD_TESTS=ON
+          -DASTALI_WARNINGS_AS_ERRORS=ON
 
       - name: Build
         shell: bash
